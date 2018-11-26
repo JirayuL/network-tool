@@ -19,7 +19,6 @@ function createSubNet(ip, networks, hosts) {
 
   console.log('IP: ' + ip + '\nMask: ' + mask + '\nMaximum number: ' + maximumNumber + '\nNetwork class: ' + networkClass + '\nNetwork: ' + networks + '\nHosts: ' + hosts)
 
-
 }
 
 function findSubnet(numberSubnet) {
