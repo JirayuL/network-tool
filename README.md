@@ -1,4 +1,4 @@
-# Network-tool
+# Subnet-generator
 
 https://subnetmaskgenerator.firebaseapp.com/
 
