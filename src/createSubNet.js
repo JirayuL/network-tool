@@ -74,6 +74,22 @@ function createSubNet(ip, networks, hosts) {
   return subnetTable
 }
 
+function getMask() {
+  return mask
+}
+
+function getNetworkClass() {
+  return networkClass
+}
+
+function getNumberOfNetwork() {
+  return numberOfNetwork
+}
+
+function getNumberOfHost() {
+  return numberOfHost
+}
+
 function addZeroUntil32(subnetID) {
   while (subnetID.length != 32) {
     subnetID = '0' + subnetID
@@ -168,8 +184,3 @@ function isClassD(firstByte) {
 function isClassE(firstByte) {
   return firstByte < 256
 }
-
-createSubNet('19.0.0.0', 20, 0)
-
-
-// export default separateIp
