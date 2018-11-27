@@ -184,7 +184,7 @@ class App extends Component {
       <Container>
         <Background />
         <Title>
-          Subnet mask generators
+          Subnet mask generator
           </Title>
         <FormBox>
           {this.state.loading ? <Loader
