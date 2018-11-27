@@ -4,10 +4,11 @@ let networkClass = 'No Class'
 let table = []
 let divideBit = 0
 let allowBits = 0
-let tableSubnet = []
+let startBit = 0
 
 // Must submit neither networks or hosts
 function createSubNet(ip, networks, hosts) {
+  let subnetTable = []
   let tempIp = ip.split('.')
   if (!verifyIp(tempIp)) {
     return console.log('This is not ipv4.')
@@ -16,7 +17,7 @@ function createSubNet(ip, networks, hosts) {
   }
 
   if (networks == 0 && hosts > 0) {
-    divideBit = findSubnetBits(allowBits - hosts)
+    divideBit = allowBits - findSubnetBits(hosts)
   } else if (hosts == 0 && networks > 0) {
     divideBit = findSubnetBits(networks)
   }
@@ -26,12 +27,70 @@ function createSubNet(ip, networks, hosts) {
   }
 
   console.log('IP: ' + ip + '\nMask: ' + mask + '\nMaximum number: ' + maximumNumber + '\nNetwork class: ' + networkClass + '\nNetwork: ' + networks + '\nHosts: ' + hosts)
-  console.log('Bits to diveide: ' + divideBit)
+  console.log('Bits to divide: ' + divideBit)
 
-  for (let i = 0; i < divideBit + 1; i++) {
+  for (let i = 0; i < tempIp.length; i++) {
+    if (tempIp[i] === '0') {
+      tempIp[i] = '00000000'
+    } else {
+      tempIp[i] = parseInt(tempIp[i]).toString(2)
+    }
+  }
+  let tempBinary = tempIp.join().replace(/,/g, '')
+  let tempDecimal = parseInt(tempBinary, 2)
+  console.log(tempBinary)
+  console.log(tempDecimal)
+
+  for (let i = 0; i < Math.pow(2, divideBit); i++) {
+    let subnetID = (tempDecimal + (i * Math.pow(2, allowBits - divideBit))).toString(2)
+    let boardcast = (tempDecimal + ((i + 1) * Math.pow(2, allowBits - divideBit)) - 1).toString(2)
+    let lastHost = (tempDecimal + ((i + 1) * Math.pow(2, allowBits - divideBit)) - 2).toString(2)
+
+    subnetID = addZeroUntil32(subnetID)
+    boardcast = addZeroUntil32(boardcast)
+    lastHost = addZeroUntil32(lastHost)
+
+    let firstHost = findFirstHost(subnetID)
+    subnetID = convertBinaryToDecimalAndJoin(subnetID)
+    boardcast = convertBinaryToDecimalAndJoin(boardcast)
+    lastHost = convertBinaryToDecimalAndJoin(lastHost)
+
+    subnetTable.push({
+      subnet: i,
+      subnetID,
+      firstHost,
+      lastHost,
+      boardcast
+    })
 
   }
 
+  console.log(subnetTable)
+
+  return subnetTable
+}
+
+function addZeroUntil32(subnetID) {
+  while (subnetID.length != 32) {
+    subnetID = '0' + subnetID
+  }
+  return subnetID
+}
+
+function convertBinaryToDecimalAndJoin(subnetID) {
+  let one = parseInt(subnetID.slice(0, 8), 2).toString()
+  let two = parseInt(subnetID.slice(8, 16), 2).toString()
+  let three = parseInt(subnetID.slice(16, 24), 2).toString()
+  let four = parseInt(subnetID.slice(24), 2).toString()
+  return one + '.' + two + '.' + three + '.' + four
+}
+
+function findFirstHost(subnetID) {
+  let one = parseInt(subnetID.slice(0, 8), 2).toString()
+  let two = parseInt(subnetID.slice(8, 16), 2).toString()
+  let three = parseInt(subnetID.slice(16, 24), 2).toString()
+  let four = parseInt(subnetID.slice(24), 2).toString()
+  return one + '.' + two + '.' + three + '.' + (parseInt(four) + 1)
 }
 
 function findSubnetBits(numberSubnet) {
@@ -41,11 +100,11 @@ function findSubnetBits(numberSubnet) {
 }
 
 function checkNetworks(networks) {
-  return networks >= 0 && networks <= maximumNumber && divideBit >= allowBits
+  return networks >= 0 && networks <= maximumNumber && divideBit <= allowBits
 }
 
 function checkHost(hosts) {
-  return hosts >= 0 && hosts <= maximumNumber && divideBit >= allowBits
+  return hosts >= 0 && hosts <= maximumNumber && divideBit <= allowBits
 }
 
 function checkClass(ip) {
@@ -106,7 +165,7 @@ function isClassE(firstByte) {
   return firstByte < 256
 }
 
-createSubNet('150.11.11.1', 10, 0)
+createSubNet('19.0.0.0', 20, 0)
 
 
 // export default separateIp
