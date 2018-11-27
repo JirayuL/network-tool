@@ -3,23 +3,27 @@ let maximumNumber = 0
 let networkClass = 'No Class'
 let divideBit = 0
 let allowBits = 0
-let startBit = 0
 let numberOfNetwork = 0
 let numberOfHost = 0
 
+export const getMask = () => mask
+export const getNetworkClass = () => networkClass
+export const getNumberOfNetwork = () => numberOfNetwork
+export const getNumberOfHost = () => numberOfHost
+
 // Must submit neither networks or hosts
-function createSubNet(ip, networks, hosts) {
+export const createSubnet = (ip, networks, hosts) => {
   let subnetTable = []
   let tempIp = ip.split('.')
   if (!verifyIp(tempIp)) {
-    return console.log('This is not ipv4.')
+    return
   } else {
     networkClass = checkClass(tempIp)
   }
 
-  if (networks == 0 && hosts > 0) {
+  if (networks === 0 && hosts > 0) {
     divideBit = allowBits - findSubnetBits(hosts)
-  } else if (hosts == 0 && networks > 0) {
+  } else if (hosts === 0 && networks > 0) {
     divideBit = findSubnetBits(networks)
   }
 
@@ -27,13 +31,8 @@ function createSubNet(ip, networks, hosts) {
   numberOfHost = Math.pow(2, (allowBits - divideBit))
 
   if (!checkNetworks(networks) || !checkHost(hosts)) {
-    return console.log('The number of networks/hosts can not divide the subnet.')
+    return
   }
-
-  console.log('IP: ' + ip + '\nMask: ' + mask + '\nMaximum number: ' + maximumNumber + '\nNetwork class: ' + networkClass + '\nNetwork: ' + networks + '\nHosts: ' + hosts)
-  console.log('Number of network: ' + numberOfNetwork)
-  console.log('Number of host per network: ' + numberOfHost)
-  console.log('Bits to divide: ' + divideBit)
 
   for (let i = 0; i < tempIp.length; i++) {
     if (tempIp[i] === '0') {
@@ -68,30 +67,11 @@ function createSubNet(ip, networks, hosts) {
     })
 
   }
-
-  console.log(subnetTable)
-
   return subnetTable
 }
 
-function getMask() {
-  return mask
-}
-
-function getNetworkClass() {
-  return networkClass
-}
-
-function getNumberOfNetwork() {
-  return numberOfNetwork
-}
-
-function getNumberOfHost() {
-  return numberOfHost
-}
-
 function addZeroUntil32(subnetID) {
-  while (subnetID.length != 32) {
+  while (subnetID.length !== 32) {
     subnetID = '0' + subnetID
   }
   return subnetID
@@ -162,7 +142,7 @@ function verifyIp(ip) {
       result = false
     }
   })
-  return result && ip.length == 4
+  return result && ip.length === 4
 }
 
 function isClassA(firstByte) {
