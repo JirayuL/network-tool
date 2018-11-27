@@ -6,9 +6,8 @@ Generate the table of subnet according to user requirement such as IP address, n
 
 ## Members
 
-Jirayu 		Laungwilawan 	5910546635
+- Jirayu Laungwilawan 5910546635
 
-Chawakorn	Suphepre 	    5910545671
+- Chawakorn Suphepre 5910545671
 
-Patiphan 	Srisook 	    5910546422
-
+- Patiphan Srisook 5910546422
