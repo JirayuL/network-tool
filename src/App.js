@@ -91,9 +91,14 @@ const Error = styled.p`
 
 const columns = [
   {
-    title: 'Boardcast',
-    dataIndex: 'boardcast',
-    key: 'boardcast',
+    title: 'Subnet',
+    dataIndex: 'subnet',
+    key: 'subnet',
+  },
+  {
+    title: 'Subnet ID',
+    dataIndex: 'subnetID',
+    key: 'subnetID',
   },
   {
     title: 'First host',
@@ -106,14 +111,9 @@ const columns = [
     key: 'lastHost',
   },
   {
-    title: 'Subnet',
-    dataIndex: 'subnet',
-    key: 'subnet',
-  },
-  {
-    title: 'Subnet ID',
-    dataIndex: 'subnetID',
-    key: 'subnetID',
+    title: 'Boardcast',
+    dataIndex: 'boardcast',
+    key: 'boardcast',
   },
 ]
 
@@ -127,8 +127,8 @@ class App extends Component {
       network: '0',
       host: '0',
       error: ' ',
-      loading: false,
     }
+    this.loading = false
   }
 
   handleInputChange = (e) => {
@@ -163,7 +163,7 @@ class App extends Component {
   }
 
   submit = () => {
-    this.setState({ loading: true })
+    this.loading = true
     const { ip, network, host } = this.state
     if (!ip || (ip && ip.length === 0))
       return this.setState({ error: 'IP Address is required' })
@@ -172,11 +172,14 @@ class App extends Component {
       return this.setState({ error: msg })
     if (host === '0' && network === '0')
       return this.setState({ error: 'Number of host or network is required' })
+    this.setState({ error: '' })
     const res = createSubnet(ip, network, host)
-    if (typeof res === 'string')
-      return this.setState({ error: res, loading: false })
+    if (typeof res === 'string') {
+      this.loading = false
+      return this.setState({ error: res })
+    }
     data = res
-    this.setState({ error: '', loading: false })
+    this.loading = false
   }
 
   render() {
@@ -187,7 +190,7 @@ class App extends Component {
           Subnet mask generator
           </Title>
         <FormBox>
-          {this.state.loading ? <Loader
+          {this.loading ? <Loader
             type="Puff"
             color="#00BFFF"
             height="300"
