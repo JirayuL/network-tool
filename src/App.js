@@ -84,37 +84,50 @@ class App extends Component {
     super(props)
     this.state = {
       ip: '',
-      network: '',
-      host: '',
+      network: '0',
+      host: '0',
       error: ' ',
     }
   }
 
   handleInputChange = (e) => {
     const { value, name, maxLength } = e.target
-    this.setState({ [name]: value.slice(0, maxLength) })
+    const newState = { [name]: value.slice(0, maxLength) }
+    if (name === 'network')
+      newState.host = 0
+    else if (name === 'host')
+      newState.network = 0
+    this.setState(newState)
   }
 
   validateIP(ip) {
     try {
       const ipSplit = ip.split('.')
-      if (ipSplit.length !== 4) return false
-      for (let ipPart of ipSplit) {
-        if (ipPart.lenghth > 3 || isNaN(ipPart)) return false
-        if (Number(ipPart) < 0 || Number(ipPart) > 255) return false
+      const msg = 'Each part of IP Address must be 0 - 255.'
+      if (ipSplit.length !== 4) {
+        return msg
       }
-      return true
+      for (let ipPart of ipSplit) {
+        if (ipPart.length > 3 || isNaN(ipPart)) {
+          return msg
+        }
+        if (Number(ipPart) < 0 || Number(ipPart) > 255) {
+          return msg
+        }
+      }
+      return ''
     } catch (e) {
-      return false
+      return this.setState({ error: 'IP Address is not in a valid form' })
     }
   }
 
   submit = () => {
     if (this.state.ip.length === 0)
       return this.setState({ error: 'IP Address is required' })
-    if (!this.validateIP(this.state.ip))
-      return this.setState({ error: 'IP Address is not in a valid form' })
-    if (this.state.host === '' && this.state.network === '')
+    const msg = this.validateIP(this.state.ip)
+    if (msg)
+      return this.setState({ error: msg })
+    if (this.state.host === '0' && this.state.network === '0')
       return this.setState({ error: 'Number of host or network is required' })
     this.setState({ error: '' })
   }
