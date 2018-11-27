@@ -1,7 +1,6 @@
 let mask = ''
 let maximumNumber = 0
 let networkClass = 'No Class'
-let table = []
 let divideBit = 0
 let allowBits = 0
 let startBit = 0
