@@ -74,6 +74,11 @@ const InputContainer = styled.div`
   }
 `
 
+const Error = styled.p`
+  color: red;
+  margin: 0;
+`
+
 class App extends Component {
   constructor(props) {
     super(props)
@@ -81,12 +86,37 @@ class App extends Component {
       ip: '',
       network: '',
       host: '',
+      error: ' ',
     }
   }
 
   handleInputChange = (e) => {
     const { value, name, maxLength } = e.target
     this.setState({ [name]: value.slice(0, maxLength) })
+  }
+
+  validateIP(ip) {
+    try {
+      const ipSplit = ip.split('.')
+      if (ipSplit.length !== 4) return false
+      for (let ipPart of ipSplit) {
+        if (ipPart.lenghth > 3 || isNaN(ipPart)) return false
+        if (Number(ipPart) < 0 || Number(ipPart) > 255) return false
+      }
+      return true
+    } catch (e) {
+      return false
+    }
+  }
+
+  submit = () => {
+    if (this.state.ip.length === 0)
+      return this.setState({ error: 'IP Address is required' })
+    if (!this.validateIP(this.state.ip))
+      return this.setState({ error: 'IP Address is not in a valid form' })
+    if (this.state.host === '' && this.state.network === '')
+      return this.setState({ error: 'Number of host or network is required' })
+    this.setState({ error: '' })
   }
 
   render() {
@@ -97,6 +127,9 @@ class App extends Component {
             Subnet mask generators
           </Title>
           <FormBox>
+            <Error>
+              {this.state.error}
+            </Error>
             <Form>
               <InputContainer>
                 <p>IP Address</p><Input name="ip" maxLength="15" onChange={this.handleInputChange} value={this.state.ip} />
@@ -107,7 +140,7 @@ class App extends Component {
               <InputContainer>
                 <p>Number of host</p><Input name="host" type="number" maxLength="7" onChange={this.handleInputChange} value={this.state.host} />
               </InputContainer>
-              <Button>Submit</Button>
+              <Button onClick={() => this.submit()}>Submit</Button>
             </Form>
           </FormBox>
         </Container>
