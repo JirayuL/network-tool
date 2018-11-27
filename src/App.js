@@ -165,8 +165,6 @@ class App extends Component {
   submit = () => {
     this.setState({ loading: true })
     const { ip, network, host } = this.state
-    console.log(this.state)
-    console.log(ip)
     if (!ip || (ip && ip.length === 0))
       return this.setState({ error: 'IP Address is required' })
     const msg = this.validateIP(ip)
@@ -174,7 +172,10 @@ class App extends Component {
       return this.setState({ error: msg })
     if (host === '0' && network === '0')
       return this.setState({ error: 'Number of host or network is required' })
-    data = createSubnet(ip, network, host)
+    const res = createSubnet(ip, network, host)
+    if (typeof res === 'string')
+      return this.setState({ error: res, loading: false })
+    data = res
     this.setState({ error: '', loading: false })
   }
 

@@ -31,7 +31,7 @@ export const createSubnet = (ip, networks, hosts) => {
   numberOfHost = Math.pow(2, (allowBits - divideBit))
 
   if (!checkNetworks(networks) || !checkHost(hosts)) {
-    return
+    return 'The number of networks/hosts can not divide the subnet.'
   }
 
   for (let i = 0; i < tempIp.length; i++) {
