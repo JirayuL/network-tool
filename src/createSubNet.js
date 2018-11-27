@@ -4,6 +4,8 @@ let networkClass = 'No Class'
 let divideBit = 0
 let allowBits = 0
 let startBit = 0
+let numberOfNetwork = 0
+let numberOfHost = 0
 
 // Must submit neither networks or hosts
 function createSubNet(ip, networks, hosts) {
@@ -21,11 +23,16 @@ function createSubNet(ip, networks, hosts) {
     divideBit = findSubnetBits(networks)
   }
 
+  numberOfNetwork = Math.pow(2, divideBit)
+  numberOfHost = Math.pow(2, (allowBits - divideBit))
+
   if (!checkNetworks(networks) || !checkHost(hosts)) {
     return console.log('The number of networks/hosts can not divide the subnet.')
   }
 
   console.log('IP: ' + ip + '\nMask: ' + mask + '\nMaximum number: ' + maximumNumber + '\nNetwork class: ' + networkClass + '\nNetwork: ' + networks + '\nHosts: ' + hosts)
+  console.log('Number of network: ' + numberOfNetwork)
+  console.log('Number of host per network: ' + numberOfHost)
   console.log('Bits to divide: ' + divideBit)
 
   for (let i = 0; i < tempIp.length; i++) {
@@ -37,8 +44,6 @@ function createSubNet(ip, networks, hosts) {
   }
   let tempBinary = tempIp.join().replace(/,/g, '')
   let tempDecimal = parseInt(tempBinary, 2)
-  console.log(tempBinary)
-  console.log(tempDecimal)
 
   for (let i = 0; i < Math.pow(2, divideBit); i++) {
     let subnetID = (tempDecimal + (i * Math.pow(2, allowBits - divideBit))).toString(2)
@@ -110,17 +115,17 @@ function checkClass(ip) {
   let domain = parseInt(ip[0])
   let netClass = ''
   if (isClassA(domain)) {
-    mask = '255.0.0.0'
+    mask = '255.0.0.0, /8'
     maximumNumber = Math.pow(2, 23)
     netClass = 'Class A'
     allowBits = 24
   } else if (isClassB(domain)) {
-    mask = '255.255.0.0'
+    mask = '255.255.0.0, /16'
     maximumNumber = Math.pow(2, 15)
     netClass = 'Class B'
     allowBits = 16
   } else if (isClassC(domain)) {
-    mask = '255.255.255.0'
+    mask = '255.255.255.0, /24'
     maximumNumber = Math.pow(2, 7)
     netClass = 'Class C'
     allowBits = 8
