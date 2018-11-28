@@ -136,6 +136,10 @@ class App extends Component {
       network: '0',
       host: '0',
       error: ' ',
+      mask: '',
+      class: '',
+      numberOfNetwork: 0,
+      numberOfHost: 0,
     }
   }
 
@@ -185,6 +189,12 @@ class App extends Component {
       return this.setState({ error: res })
     }
     data = res
+    this.setState({
+      mask: getMask(),
+      class: getNetworkClass(),
+      numberOfNetwork: getNumberOfNetwork(),
+      numberOfHost: getNumberOfHost
+    })
   }
 
   render() {
@@ -223,10 +233,10 @@ class App extends Component {
                     <p>Number of host:</p>
                   </div>
                   <div style={{ marginLeft: '50px' }}>
-                    <p>{getMask() || '-'}</p>
-                    <p>{getNetworkClass() || '-'}</p>
-                    <p>{getNumberOfNetwork() || 0}</p>
-                    <p>{getNumberOfHost() || 0}</p>
+                    <p>{this.state.mask || '-'}</p>
+                    <p>{this.state.class || '-'}</p>
+                    <p>{this.state.numberOfNetwork || 0}</p>
+                    <p>{this.state.numberOfHost || 0}</p>
                   </div>
                 </div>
               </FormBox>
