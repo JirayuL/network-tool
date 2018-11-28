@@ -194,7 +194,7 @@ class App extends Component {
       mask: getMask(),
       class: getNetworkClass(),
       numberOfNetwork: getNumberOfNetwork(),
-      numberOfHost: getNumberOfHost
+      numberOfHost: getNumberOfHost()
     })
   }
 
