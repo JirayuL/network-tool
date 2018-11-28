@@ -3,7 +3,6 @@ import { Table } from 'antd'
 import styled from 'styled-components'
 import { createSubnet, getMask, getNumberOfHost, getNumberOfNetwork, getNetworkClass } from './createSubNet'
 import 'antd/dist/antd.css'
-import Loader from 'react-loader-spinner'
 
 const Background = styled.div`
   background-image: url('https://newsroom.cisco.com/documents/10157/14740/internet-emerge-econ_1200x675_hero_071317.jpg/d1ff2819-b7a4-42d1-b257-8de2c00d3aa3');
@@ -94,26 +93,36 @@ const columns = [
     title: 'Subnet',
     dataIndex: 'subnet',
     key: 'subnet',
+    defaultSortOrder: 'ascend',
+    sorter: (a, b) => a.subnet - b.subnet,
   },
   {
     title: 'Subnet ID',
     dataIndex: 'subnetID',
     key: 'subnetID',
+    defaultSortOrder: 'ascend',
+    sorter: (a, b) => a.subnetID.localeCompare(b.subnetID),
   },
   {
     title: 'First host',
     dataIndex: 'firstHost',
     key: 'firstHost',
+    defaultSortOrder: 'ascend',
+    sorter: (a, b) => a.firstHost.localeCompare(b.firstHost),
   },
   {
     title: 'Last host',
     dataIndex: 'lastHost',
     key: 'lastHost',
+    defaultSortOrder: 'ascend',
+    sorter: (a, b) => a.lastHost.localeCompare(b.lastHost),
   },
   {
     title: 'Boardcast',
     dataIndex: 'boardcast',
     key: 'boardcast',
+    defaultSortOrder: 'ascend',
+    sorter: (a, b) => a.boardcast.localeCompare(b.boardcast),
   },
 ]
 
