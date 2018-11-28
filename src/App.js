@@ -3,7 +3,6 @@ import { Table } from 'antd'
 import styled from 'styled-components'
 import { createSubnet, getMask, getNumberOfHost, getNumberOfNetwork, getNetworkClass } from './createSubNet'
 import 'antd/dist/antd.css'
-import Loader from 'react-loader-spinner'
 
 const Background = styled.div`
   background-image: url('https://newsroom.cisco.com/documents/10157/14740/internet-emerge-econ_1200x675_hero_071317.jpg/d1ff2819-b7a4-42d1-b257-8de2c00d3aa3');
@@ -94,26 +93,36 @@ const columns = [
     title: 'Subnet',
     dataIndex: 'subnet',
     key: 'subnet',
+    defaultSortOrder: 'ascend',
+    sorter: (a, b) => a.subnet - b.subnet,
   },
   {
     title: 'Subnet ID',
     dataIndex: 'subnetID',
     key: 'subnetID',
+    defaultSortOrder: 'ascend',
+    sorter: (a, b) => a.subnetID.localeCompare(b.subnetID),
   },
   {
     title: 'First host',
     dataIndex: 'firstHost',
     key: 'firstHost',
+    defaultSortOrder: 'ascend',
+    sorter: (a, b) => a.firstHost.localeCompare(b.firstHost),
   },
   {
     title: 'Last host',
     dataIndex: 'lastHost',
     key: 'lastHost',
+    defaultSortOrder: 'ascend',
+    sorter: (a, b) => a.lastHost.localeCompare(b.lastHost),
   },
   {
     title: 'Boardcast',
     dataIndex: 'boardcast',
     key: 'boardcast',
+    defaultSortOrder: 'ascend',
+    sorter: (a, b) => a.boardcast.localeCompare(b.boardcast),
   },
 ]
 
@@ -128,7 +137,6 @@ class App extends Component {
       host: '0',
       error: ' ',
     }
-    this.loading = false
   }
 
   handleInputChange = (e) => {
@@ -163,7 +171,6 @@ class App extends Component {
   }
 
   submit = () => {
-    this.loading = true
     const { ip, network, host } = this.state
     if (!ip || (ip && ip.length === 0))
       return this.setState({ error: 'IP Address is required' })
@@ -175,11 +182,9 @@ class App extends Component {
     this.setState({ error: '' })
     const res = createSubnet(ip, network, host)
     if (typeof res === 'string') {
-      this.loading = false
       return this.setState({ error: res })
     }
     data = res
-    this.loading = false
   }
 
   render() {
@@ -190,30 +195,21 @@ class App extends Component {
           Subnet mask generator
           </Title>
         <FormBox>
-          {this.loading ? <Loader
-            type="Puff"
-            color="#00BFFF"
-            height="300"
-            width="300"
-          /> :
-            <div>
-              <Error>
-                {this.state.error}
-              </Error>
-              <Form>
-                <InputContainer>
-                  <p style={{ marginTop: '20px' }}>IP Address</p><Input name="ip" maxLength="15" onChange={this.handleInputChange} value={this.state.ip} />
-                </InputContainer>
-                <InputContainer>
-                  <p style={{ marginTop: '20px' }}>Number of network</p><Input name="network" type="number" maxLength="7" onChange={this.handleInputChange} value={this.state.network} />
-                </InputContainer>
-                <InputContainer>
-                  <p style={{ marginTop: '20px' }}>Number of host</p><Input name="host" type="number" maxLength="7" onChange={this.handleInputChange} value={this.state.host} />
-                </InputContainer>
-                <Button onClick={() => this.submit()}>Submit</Button>
-              </Form>
-            </div>
-          }
+          <Error>
+            {this.state.error}
+          </Error>
+          <Form>
+            <InputContainer>
+              <p style={{ marginTop: '20px' }}>IP Address</p><Input name="ip" maxLength="15" onChange={this.handleInputChange} value={this.state.ip} />
+            </InputContainer>
+            <InputContainer>
+              <p style={{ marginTop: '20px' }}>Number of network</p><Input name="network" type="number" maxLength="7" onChange={this.handleInputChange} value={this.state.network} />
+            </InputContainer>
+            <InputContainer>
+              <p style={{ marginTop: '20px' }}>Number of host</p><Input name="host" type="number" maxLength="7" onChange={this.handleInputChange} value={this.state.host} />
+            </InputContainer>
+            <Button onClick={() => this.submit()}>Submit</Button>
+          </Form>
         </FormBox>
         {
           data && data.length > 0 ?
