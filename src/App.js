@@ -128,7 +128,6 @@ class App extends Component {
       host: '0',
       error: ' ',
     }
-    this.loading = false
   }
 
   handleInputChange = (e) => {
@@ -163,7 +162,6 @@ class App extends Component {
   }
 
   submit = () => {
-    this.loading = true
     const { ip, network, host } = this.state
     if (!ip || (ip && ip.length === 0))
       return this.setState({ error: 'IP Address is required' })
@@ -175,11 +173,9 @@ class App extends Component {
     this.setState({ error: '' })
     const res = createSubnet(ip, network, host)
     if (typeof res === 'string') {
-      this.loading = false
       return this.setState({ error: res })
     }
     data = res
-    this.loading = false
   }
 
   render() {
@@ -190,30 +186,21 @@ class App extends Component {
           Subnet mask generator
           </Title>
         <FormBox>
-          {this.loading ? <Loader
-            type="Puff"
-            color="#00BFFF"
-            height="300"
-            width="300"
-          /> :
-            <div>
-              <Error>
-                {this.state.error}
-              </Error>
-              <Form>
-                <InputContainer>
-                  <p style={{ marginTop: '20px' }}>IP Address</p><Input name="ip" maxLength="15" onChange={this.handleInputChange} value={this.state.ip} />
-                </InputContainer>
-                <InputContainer>
-                  <p style={{ marginTop: '20px' }}>Number of network</p><Input name="network" type="number" maxLength="7" onChange={this.handleInputChange} value={this.state.network} />
-                </InputContainer>
-                <InputContainer>
-                  <p style={{ marginTop: '20px' }}>Number of host</p><Input name="host" type="number" maxLength="7" onChange={this.handleInputChange} value={this.state.host} />
-                </InputContainer>
-                <Button onClick={() => this.submit()}>Submit</Button>
-              </Form>
-            </div>
-          }
+          <Error>
+            {this.state.error}
+          </Error>
+          <Form>
+            <InputContainer>
+              <p style={{ marginTop: '20px' }}>IP Address</p><Input name="ip" maxLength="15" onChange={this.handleInputChange} value={this.state.ip} />
+            </InputContainer>
+            <InputContainer>
+              <p style={{ marginTop: '20px' }}>Number of network</p><Input name="network" type="number" maxLength="7" onChange={this.handleInputChange} value={this.state.network} />
+            </InputContainer>
+            <InputContainer>
+              <p style={{ marginTop: '20px' }}>Number of host</p><Input name="host" type="number" maxLength="7" onChange={this.handleInputChange} value={this.state.host} />
+            </InputContainer>
+            <Button onClick={() => this.submit()}>Submit</Button>
+          </Form>
         </FormBox>
         {
           data && data.length > 0 ?
