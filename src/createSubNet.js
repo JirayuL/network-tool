@@ -39,13 +39,22 @@ export const createSubnet = (ip, networks, hosts) => {
       tempIp[i] = '00000000'
     } else {
       tempIp[i] = parseInt(tempIp[i]).toString(2)
+      while (tempIp[i].length !== 8) {
+        tempIp[i] = '0' + tempIp[i]
+      }
+      console.log(tempIp[i])
     }
   }
+  // console.log(tempIp)
   let tempBinary = tempIp.join().replace(/,/g, '')
   let tempDecimal = parseInt(tempBinary, 2)
+  // console.log(tempDecimal)
+
 
   for (let i = 0; i < Math.pow(2, divideBit); i++) {
     let subnetID = (tempDecimal + (i * Math.pow(2, allowBits - divideBit))).toString(2)
+    // console.log(subnetID)
+
     let boardcast = (tempDecimal + ((i + 1) * Math.pow(2, allowBits - divideBit)) - 1).toString(2)
     let lastHost = (tempDecimal + ((i + 1) * Math.pow(2, allowBits - divideBit)) - 2).toString(2)
 
